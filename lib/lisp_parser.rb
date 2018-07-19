@@ -1,5 +1,6 @@
 class LispParser
   attr_reader :code
+
   def initialize(code:)
     @code = code
   end
@@ -13,7 +14,6 @@ class LispParser
   end
 
   def parse_tokens(tokens:, ast: nil)
-    # puts "called parse_tokens with tokens: #{tokens.inspect}, ast: #{ast.inspect}"
     if token = tokens.shift
       if token == "("
         expression_length = sub_expression_length(tokens: tokens)
