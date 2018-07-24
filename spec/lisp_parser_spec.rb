@@ -58,5 +58,12 @@ describe LispParser do
 
       expect(ast).to eq [:+, [:*, 3, 4], 1, 2]
     end
+
+    it "raises on an expression with unbalanced parens" do
+      lisp_code = "(+ (* 3 4)) 1 2)"
+      lisp_parser = described_class.new(code: lisp_code)
+
+      expect{ lisp_parser.abstract_syntax_tree }.to raise_error(StandardError)
+    end
   end
 end

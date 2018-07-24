@@ -13,6 +13,22 @@ class LispParser
     @abstract_syntax_tree ||= parse_tokens(tokens: tokens)
   end
 
+  def parse_tokens2(tokens:)
+    token = tokens.shift
+    if token == "("
+      ast = []
+      while tokens.first != ")"
+        ast << parse_tokens2(tokens: tokens)
+      end
+      tokens.shift # drop a closing paren
+      ast
+    elsif token == ")"
+      raise StandardError, "Parens are not balanced"
+    else
+      symbolize(string: token)
+    end
+  end
+
   def parse_tokens(tokens:, ast: nil)
     if token = tokens.shift
       if token == "("
@@ -26,6 +42,8 @@ class LispParser
           ast << sub_expression
           parse_tokens(tokens: tokens, ast: ast)
         end
+      elsif token == ")"
+        raise StandardError, "Parens are not balanced!"
       else
         ast << symbolize(string: token)
         parse_tokens(tokens: tokens, ast: ast)
